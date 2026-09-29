@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .container {    position: relative;
+    width: 1200px; /* Imposta la larghezza desiderata per l'immagine */
+    margin: 0 auto; /* Centra il contenitore orizzontalmente */	
+  }
+
+  .world-map { width: 100%;   height: auto; /* Mantiene le proporzioni dell'immagine */	  }
+
+  .shadow-overlay {    position: absolute;    top: 0;    left: 0;
+    width: 100%;    height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* Colore dell'ombra con trasparenza */
+  }
+
+  .clear-ellipse {    position: absolute;
+    top: 50%; /* Posiziona l'ellisse al centro verticale */
+    width: 600px; /* Imposta la larghezza dell'ellisse */
+    height: 720px; /* Imposta l'altezza dell'ellisse */
+    background: rgba(255, 255, 255, 0); /* Trasparente */
+    border-radius: 50% / 25%; /* Rende l'ellisse */
+    transform: translate(-50%, -50%); /* Centra l'ellisse */
+    pointer-events: none; /* Impedisce l'interazione con l'ellisse */
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6); /* Crea un'ombra esterna */
+  }
+
+  .reference-line {    position: absolute;
+    top: 0; /* Posiziona la linea all'inizio dell'ellisse */
+    left: 50%; /* Posiziona la linea al centro orizzontale dell'ellisse */
+    width: 1px; /* Spessore della linea */
+    height: 100%; /* Altezza della linea */
+    background: rgba(255, 255, 255, 0.6); /* Colore della linea */
+    transform: translateX(-1px); /* Centra orizzontalmente la linea */
+  }
+</style>
+</head>
+
+
+
+<body>
+
+<table align=center idth=100% cellpadding=0 cellspacing=0> 
+<tr>
+<td><img src="1.jpg"></td>
+
+<td width=1200><div class="container">  <img src="2.jpg" alt="World Map" class="world-map">
+	  <div class="shadow-overlay" id="shadow-overlay"></div>
+	  <div class="clear-ellipse" id="clear-ellipse">
+	  <div class="reference-line"></div> <!-- Aggiungi la linea di riferimento -->
+</div></div></td>
+
+<td><img src="3.jpg"></td>
+</tr>
+</table>
+
+<!-- Aggiungi un elemento select per l'ora -->
+<div style="text-align: center; margin-top: 20px;">
+ITALY Riferiment  <br>
+<label for="hour-select">Seleziona un'ora:</label>
+  <select id="hour-select" onchange="updateShadow()">
+    <!-- Crea le opzioni dalle 00:00 alle 24:00 -->
+    <script>
+      for (var i = 0; i < 24; i++) {
+        var option = document.createElement("option");
+        option.value = i;
+        option.text = i + ":00";
+        document.getElementById("hour-select").appendChild(option);
+      }
+    </script>
+  </select>
+</div>
+
+<script>
+  function updateShadow() {
+    var select = document.getElementById('hour-select');
+    var selectedHour = select.value;
+
+    var hours = parseInt(selectedHour);
+    var dayProgress = hours / 24;
+
+    var ellipsePositionPx = (1 - dayProgress) * 1200;
+
+    var ellipse = document.getElementById('clear-ellipse');
+    ellipse.style.left = ellipsePositionPx + 'px';
+  }
+
+  // Quando la pagina è caricata
+  window.onload = function() {
+    var now = new Date();
+    var currentHour = now.getHours(); // Ora del sistema (0-23)
+
+    var select = document.getElementById("hour-select");
+    select.value = currentHour; // Seleziona automaticamente l'ora corrente
+
+    updateShadow(); // Aggiorna la posizione dell'ellisse
+  };
+</script>
+
+</body>
+</html>
